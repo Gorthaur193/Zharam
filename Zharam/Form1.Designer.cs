@@ -29,49 +29,59 @@
         private void InitializeComponent()
         {
             this.FilePicker = new System.Windows.Forms.OpenFileDialog();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.Send_Button = new System.Windows.Forms.Button();
-            this.File_Button = new System.Windows.Forms.Button();
+            this.SendBox = new System.Windows.Forms.RichTextBox();
+            this.SendButton = new System.Windows.Forms.Button();
+            this.FileButton = new System.Windows.Forms.Button();
+            this.ChatList = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // FilePicker
             // 
             this.FilePicker.FileName = "PickedFile";
             // 
-            // richTextBox1
+            // SendBox
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(74, 990);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(448, 140);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.SendBox.Location = new System.Drawing.Point(74, 990);
+            this.SendBox.Name = "SendBox";
+            this.SendBox.Size = new System.Drawing.Size(448, 140);
+            this.SendBox.TabIndex = 0;
+            this.SendBox.Text = "";
             // 
-            // Send_Button
+            // SendButton
             // 
-            this.Send_Button.Location = new System.Drawing.Point(529, 990);
-            this.Send_Button.Name = "Send_Button";
-            this.Send_Button.Size = new System.Drawing.Size(93, 140);
-            this.Send_Button.TabIndex = 1;
-            this.Send_Button.Text = "Send";
-            this.Send_Button.UseVisualStyleBackColor = true;
+            this.SendButton.Location = new System.Drawing.Point(529, 990);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(93, 140);
+            this.SendButton.TabIndex = 1;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
             // 
-            // File_Button
+            // FileButton
             // 
-            this.File_Button.Location = new System.Drawing.Point(12, 990);
-            this.File_Button.Name = "File_Button";
-            this.File_Button.Size = new System.Drawing.Size(56, 140);
-            this.File_Button.TabIndex = 2;
-            this.File_Button.Text = "File";
-            this.File_Button.UseVisualStyleBackColor = true;
+            this.FileButton.Location = new System.Drawing.Point(12, 990);
+            this.FileButton.Name = "FileButton";
+            this.FileButton.Size = new System.Drawing.Size(56, 140);
+            this.FileButton.TabIndex = 2;
+            this.FileButton.Text = "File";
+            this.FileButton.UseVisualStyleBackColor = true;
+            // 
+            // ChatList
+            // 
+            this.ChatList.Location = new System.Drawing.Point(13, 13);
+            this.ChatList.Name = "ChatList";
+            this.ChatList.Size = new System.Drawing.Size(609, 971);
+            this.ChatList.TabIndex = 3;
+            this.ChatList.UseCompatibleStateImageBehavior = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 1142);
-            this.Controls.Add(this.File_Button);
-            this.Controls.Add(this.Send_Button);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.ChatList);
+            this.Controls.Add(this.FileButton);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.SendBox);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -81,9 +91,10 @@
         #endregion
 
         private System.Windows.Forms.OpenFileDialog FilePicker;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Button Send_Button;
-        private System.Windows.Forms.Button File_Button;
+        private System.Windows.Forms.RichTextBox SendBox;
+        private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.Button FileButton;
+        private System.Windows.Forms.ListView ChatList;
     }
 }
 

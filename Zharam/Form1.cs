@@ -12,9 +12,14 @@ namespace Zharam
 {
     public partial class Form1 : Form
     {
+        int i = 0;
         public Form1()
         {
             InitializeComponent();
+
+            ListViewItem listViewItem = new ListViewItem($"Say{i++}");
+            ChatList.Items.Add(listViewItem);
         }
+
     }
 }
