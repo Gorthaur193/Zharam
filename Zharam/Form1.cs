@@ -20,14 +20,10 @@ namespace Zharam
 
             for (int k = 0; k < 100; k++)
             {
-                ListViewItem listViewItem = new ListViewItem($"Say{k}");
+                ListViewItem listViewItem = new ListViewItem($"Sayjhzdvfcsdhjbasj,dfbsdv,ajdfn {k}");
                 ChatList.Items.Add(listViewItem);
             }
             ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
-
-            Messaging.Message A = new TextMessage($"{{\"Guid\":\"{Guid.NewGuid()}\", \"Message\":\"WOW\"}}");
-            var w = A as TextMessage;
-            var eqwq = w.ToString();
         }
 
         private void ChatList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)

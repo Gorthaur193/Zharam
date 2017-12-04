@@ -8,18 +8,15 @@ using System.Threading.Tasks;
 
 namespace Zharam.Messaging
 {
-    public enum MessageType
-    {
-        Text,
-        File,
-    }
-
     public abstract class Message
     {
         Guid Guid { get; }
         public override string ToString()
         {
-            return new JObject(this, new { Type = GetType().ToString() }).ToString();
+            string Name = this.GetType().ToString().Substring(17);
+            JObject jObject= JObject.FromObject(this);
+            jObject.Add("Type", Name);
+            return jObject.ToString();
         }
     }
 
