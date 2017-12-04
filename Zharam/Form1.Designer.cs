@@ -41,49 +41,57 @@
             // 
             // SendBox
             // 
-            this.SendBox.Location = new System.Drawing.Point(74, 990);
+            this.SendBox.Location = new System.Drawing.Point(60, 1000);
             this.SendBox.Name = "SendBox";
-            this.SendBox.Size = new System.Drawing.Size(448, 140);
+            this.SendBox.Size = new System.Drawing.Size(490, 150);
             this.SendBox.TabIndex = 0;
             this.SendBox.Text = "";
             // 
             // SendButton
             // 
-            this.SendButton.Location = new System.Drawing.Point(529, 990);
+            this.SendButton.Location = new System.Drawing.Point(550, 1000);
             this.SendButton.Name = "SendButton";
-            this.SendButton.Size = new System.Drawing.Size(93, 140);
+            this.SendButton.Size = new System.Drawing.Size(100, 150);
             this.SendButton.TabIndex = 1;
             this.SendButton.Text = "Send";
             this.SendButton.UseVisualStyleBackColor = true;
             // 
             // FileButton
             // 
-            this.FileButton.Location = new System.Drawing.Point(12, 990);
+            this.FileButton.Location = new System.Drawing.Point(0, 1000);
             this.FileButton.Name = "FileButton";
-            this.FileButton.Size = new System.Drawing.Size(56, 140);
+            this.FileButton.Size = new System.Drawing.Size(60, 150);
             this.FileButton.TabIndex = 2;
             this.FileButton.Text = "File";
             this.FileButton.UseVisualStyleBackColor = true;
             // 
             // ChatList
             // 
-            this.ChatList.Location = new System.Drawing.Point(13, 13);
+            this.ChatList.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.ChatList.AutoArrange = false;
+            this.ChatList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ChatList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.ChatList.Location = new System.Drawing.Point(0, 0);
+            this.ChatList.MultiSelect = false;
             this.ChatList.Name = "ChatList";
-            this.ChatList.Size = new System.Drawing.Size(609, 971);
+            this.ChatList.ShowGroups = false;
+            this.ChatList.Size = new System.Drawing.Size(650, 1000);
             this.ChatList.TabIndex = 3;
             this.ChatList.UseCompatibleStateImageBehavior = false;
+            this.ChatList.View = System.Windows.Forms.View.Details;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 1142);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(650, 1149);
             this.Controls.Add(this.ChatList);
             this.Controls.Add(this.FileButton);
             this.Controls.Add(this.SendButton);
             this.Controls.Add(this.SendBox);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Zharam Chat";
             this.ResumeLayout(false);
 
         }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zharam.MessageClasses
+namespace Zharam.Messaging
 {
     public enum MessageType
     {
@@ -13,27 +14,35 @@ namespace Zharam.MessageClasses
         File,
     }
 
-    public interface IMessage
+    public abstract class Message
     {
         Guid Guid { get; }
-    }
-
-    public class FileMessage : IMessage
-    {
-        public Guid Guid { get; private set; }
-        public string FileAddress { get; set; }
-        public FileMessage()
+        public override string ToString()
         {
-            
+            return new JObject(this, new { Type = GetType().ToString() }).ToString();
         }
     }
-    public class TextMessage : IMessage
+
+    public class FileMessage : Message
+    {
+        public Guid Guid { get; private set; }
+        public string FileAddress { get; private set; }
+        public FileMessage(string json)
+        {
+            JObject Income = JObject.Parse(json);
+            Guid = (Guid)Income["Guid"];
+            FileAddress = (string)Income["FileAddress"];
+        }
+    }
+    public class TextMessage : Message
     {
         public Guid Guid { get; private set; }
         public string Message { get; private set; }
-        public TextMessage()
+        public TextMessage(string json)
         {
-
+            JObject Income = JObject.Parse(json);
+            Guid = (Guid)Income["Guid"];
+            Message = (string)Income["Message"];
         }
     }
 }

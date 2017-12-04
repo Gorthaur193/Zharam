@@ -7,19 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Zharam.Messaging;
 
 namespace Zharam
 {
     public partial class Form1 : Form
     {
-        int i = 0;
         public Form1()
         {
             InitializeComponent();
+            this.ChatList.Columns.Add("", ChatList.Width - 25);
 
-            ListViewItem listViewItem = new ListViewItem($"Say{i++}");
-            ChatList.Items.Add(listViewItem);
+            for (int k = 0; k < 100; k++)
+            {
+                ListViewItem listViewItem = new ListViewItem($"Say{k}");
+                ChatList.Items.Add(listViewItem);
+            }
+            ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
+
+            Messaging.Message A = new TextMessage($"{{\"Guid\":\"{Guid.NewGuid()}\", \"Message\":\"WOW\"}}");
+            var w = A as TextMessage;
+            var eqwq = w.ToString();
         }
 
+        private void ChatList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            var q = e.Item;
+            
+            this.ChatList.Columns[0].Text = q.Text;
+        }
     }
 }
