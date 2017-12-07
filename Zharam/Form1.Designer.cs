@@ -74,6 +74,7 @@
             this.ChatList.Location = new System.Drawing.Point(0, 0);
             this.ChatList.MultiSelect = false;
             this.ChatList.Name = "ChatList";
+            this.ChatList.OwnerDraw = true;
             this.ChatList.ShowGroups = false;
             this.ChatList.Size = new System.Drawing.Size(650, 1000);
             this.ChatList.TabIndex = 3;
