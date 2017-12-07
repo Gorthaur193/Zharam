@@ -1,24 +1,29 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace ZharamServ.Controllers
 {
     public class MessageController : ApiController
     {
-        // GET: api/Message
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // POST: api/Message
-        public string Post(string value)
+        public HttpResponseMessage Post(string message, string myid)
         {
-            return (value + '1');
+            var name = (Ws.clients.First((A) => (A as MyWebSocketHandler).id == myid) as MyWebSocketHandler).name;
+            JObject json = new JObject();
+            json.Add("Message", message);
+            json.Add("Id", myid);
+            json.Add("Name", name);
+            Ws.clients.Broadcast(json.ToString());
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }

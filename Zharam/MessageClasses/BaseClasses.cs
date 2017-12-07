@@ -30,11 +30,22 @@ namespace Zharam.Messaging
             Guid = (Guid)Income["Guid"];
             FileAddress = (string)Income["FileAddress"];
         }
+        public FileMessage(string Address, byte a = 0)
+        {
+            Guid = Guid.NewGuid();
+            FileAddress = Address;
+        }
     }
     public class TextMessage : Message
     {
         public Guid Guid { get; private set; }
         public string Message { get; private set; }
+        public TextMessage(string Address, byte a = 0)
+        {
+            Guid = Guid.NewGuid();
+            Message = Address;
+        }
+
         public TextMessage(string json)
         {
             JObject Income = JObject.Parse(json);

@@ -55,6 +55,7 @@
             this.SendButton.TabIndex = 1;
             this.SendButton.Text = "Send";
             this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
             // FileButton
             // 
@@ -64,6 +65,7 @@
             this.FileButton.TabIndex = 2;
             this.FileButton.Text = "File";
             this.FileButton.UseVisualStyleBackColor = true;
+            this.FileButton.Click += new System.EventHandler(this.FileButton_Click);
             // 
             // ChatList
             // 
@@ -74,7 +76,6 @@
             this.ChatList.Location = new System.Drawing.Point(0, 0);
             this.ChatList.MultiSelect = false;
             this.ChatList.Name = "ChatList";
-            this.ChatList.OwnerDraw = true;
             this.ChatList.ShowGroups = false;
             this.ChatList.Size = new System.Drawing.Size(650, 1000);
             this.ChatList.TabIndex = 3;

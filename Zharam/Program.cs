@@ -8,6 +8,7 @@ namespace Zharam
 {
     static class Program
     {
+        public static string BaseAddress => "localhost/ZharamServ/";
         [STAThread]
         static void Main()
         {

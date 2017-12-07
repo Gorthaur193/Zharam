@@ -1,4 +1,5 @@
 ﻿using Microsoft.Web.WebSockets;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,28 +31,36 @@ namespace ZharamServ
 
     public class MyWebSocketHandler : WebSocketHandler
     {
-        private string name;
+        public string name;
+        public string id;
 
         public MyWebSocketHandler()
         {
         }
 
-        public override void OnOpen()
-        {
-            this.name = this.WebSocketContext.QueryString["token"];
-            Ws.clients.Add(this);
-            Ws.clients.Broadcast(name + " has connected.");
-        }
-
         public override void OnMessage(string message)
         {
-            Ws.clients.Broadcast(string.Format("{0} said: {1}", name, message));
+            JObject json = new JObject();
+            json.Add("Message", message);
+            json.Add("Id", id);
+            json.Add("Name", name);
+            Ws.clients.Broadcast(json.ToString());
+
+        }
+
+        public override void OnOpen()
+        {
+            this.name = this.WebSocketContext.QueryString["name"];
+            this.id = Guid.NewGuid().ToString();
+            this.Send(id);
+            Ws.clients.Add(this);
+            Ws.clients.Broadcast(name + " has connected.");
         }
 
         public override void OnClose()
         {
             Ws.clients.Remove(this);
-            Ws.clients.Broadcast(string.Format("{0} has gone away.", name));
+            Ws.clients.Broadcast($"{name} has gone away.");
         }
     }
 
