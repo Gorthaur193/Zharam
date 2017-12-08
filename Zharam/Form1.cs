@@ -61,7 +61,7 @@ namespace Zharam
             byte[] buffer = new byte[1024];
             var segment = new ArraySegment<byte>(buffer);
             await Ws.ReceiveAsync(segment, CancellationToken.None);
-            MyId = Encoding.UTF8.GetString(buffer);
+            MyId = Encoding.UTF8.GetString(buffer).Replace("\0", "");
 
             while (true)
             {
