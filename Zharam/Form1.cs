@@ -38,17 +38,17 @@ namespace Zharam
             InitializeComponent();
             this.ChatList.Columns.Add("", ChatList.Width - 25);
 
-            //ChatList.OwnerDraw = true;
-            //ChatList.DrawSubItem += (sender, e) =>
-            //{
-            //    if ((bool?)e.Item.Tag == null)
-            //        e.DrawText(TextFormatFlags.Right);
-            //    else if ((bool)e.Item.Tag) // true if message is Mine
-            //        e.DrawText(TextFormatFlags.Right);
-            //    else
-            //        e.DrawText(TextFormatFlags.Left);
-            //};
-            //ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
+            ChatList.OwnerDraw = true;
+            ChatList.DrawSubItem += (sender, e) =>
+            {
+                if ((bool?)e.Item.Tag == null)
+                    e.DrawText(TextFormatFlags.HorizontalCenter);
+                else if ((bool)e.Item.Tag) // true if message is Mine
+                    e.DrawText(TextFormatFlags.Right);
+                else
+                    e.DrawText(TextFormatFlags.Left);
+            };
+            ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
 
             SocketInit();
         }
@@ -69,7 +69,7 @@ namespace Zharam
                 segment = new ArraySegment<byte>(buffer);
                 await Ws.ReceiveAsync(segment, CancellationToken.None);
 
-                string json = Encoding.UTF8.GetString(buffer).Trim();
+                string json = Encoding.UTF8.GetString(buffer).Trim().Replace("\0", "");
 
                 ListViewItem listViewItem;
                 try
@@ -109,6 +109,7 @@ namespace Zharam
             if (q.Text[0] == '\t' && MessageBox.Show("Download File?", "Download alert", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 CloudBlockBlob blockBlob = CloudContainer.GetBlockBlobReference(q.Text.Substring(1));
+                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/ZharamDownloads");
                 using (var fileStream = File.OpenWrite($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/ZharamDownloads/{q.Text.Substring(1)}"))
                     blockBlob.DownloadToStream(fileStream);
                 MessageBox.Show("DOWNLOADED");

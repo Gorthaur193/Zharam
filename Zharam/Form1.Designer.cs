@@ -81,6 +81,7 @@
             this.ChatList.TabIndex = 3;
             this.ChatList.UseCompatibleStateImageBehavior = false;
             this.ChatList.View = System.Windows.Forms.View.Details;
+            this.ChatList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ChatList_ItemSelectionChanged);
             // 
             // Form1
             // 
