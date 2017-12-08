@@ -30,7 +30,8 @@ namespace Zharam
             name = CustomInputControl.ShowDialog("Enter Name", "TITLE");
 
             this.ChatList.Columns.Add("", ChatList.Width - 25);
-            /*ChatList.DrawSubItem += (sender, e) =>
+            /* ChatList.OwnerDraw = true;
+             * ChatList.DrawSubItem += (sender, e) =>
             {
                 if ((bool?)e.Item.Tag == null)
                     e.DrawText(TextFormatFlags.Right);
@@ -51,7 +52,7 @@ namespace Zharam
             var segment = new ArraySegment<byte>(buffer);
             await ws.ReceiveAsync(segment, CancellationToken.None);
             MyId = Encoding.UTF8.GetString(buffer);
-            string lastmessage = "";
+            //string lastmessage = "";
             while (true)
             {
                 buffer = new byte[1024];
@@ -59,8 +60,8 @@ namespace Zharam
                 await ws.ReceiveAsync(segment, CancellationToken.None);
 
                 string json = Encoding.UTF8.GetString(buffer).Trim();
-                if (lastmessage != json) lastmessage = json;
-                else continue;
+                //if (lastmessage != json) lastmessage = json;
+                //else continue;
                 ListViewItem listViewItem;
                 try
                 {
@@ -88,6 +89,7 @@ namespace Zharam
         CloudBlobClient blobClient => storageAccount.CreateCloudBlobClient();
         CloudBlobContainer container => blobClient.GetContainerReference("messagecontainer");
         delegate void AddMessage();
+
         private string UploadFile(string Path)
         {
             string NewFileName = Guid.NewGuid().ToString();
@@ -102,7 +104,7 @@ namespace Zharam
             if (q.Text[0] == '\t')
             {
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference(q.Text.Substring(1));
-                using (var fileStream = System.IO.File.OpenWrite($"c:/q/{q.Text.Substring(1)}"))
+                using (var fileStream = File.OpenWrite($"c:/q/{q.Text.Substring(1)}"))
                     blockBlob.DownloadToStream(fileStream);
                 MessageBox.Show("DOWNLOADED");
             }
@@ -111,7 +113,7 @@ namespace Zharam
         private async void SendButton_Click(object sender, EventArgs e)
         {
             string line = SendBox.Text;
-            string qwery = $"http://{Program.BaseAddress}api/message/?message={(new TextMessage(line, 0)).ToString()}&myid={MyId}".Replace("\r\n", "");
+            string qwery = $"http://{Program.BaseAddress}api/message/?message={(new TextMessage(line, 0)).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", "");
             var qwe = await new HttpClient().PostAsync(qwery, new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
             var qwr = qwe.Content.ReadAsStringAsync();
         }
@@ -119,7 +121,12 @@ namespace Zharam
         private async void FileButton_Click(object sender, EventArgs e)
         {
             if (FilePicker.ShowDialog() == DialogResult.OK)
-                await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message?message={new TextMessage(UploadFile(FilePicker.FileName), 0).ToString()}&myid={MyId}", new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
+            {
+                string line = $"http://{Program.BaseAddress}api/message?message={new FileMessage(UploadFile(FilePicker.FileName), 0).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", "");
+
+                var qwe = await new HttpClient().PostAsync(line, new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
+                var qwr = qwe.Content.ReadAsStringAsync();
+            }
         }
     }
 
@@ -127,10 +134,12 @@ namespace Zharam
     {
         public static string ShowDialog(string label, string title)
         {
-            Form inputBox = new Form();
-            inputBox.Width = 300;
-            inputBox.Height = 200;
-            inputBox.Text = title;
+            Form inputBox = new Form
+            {
+                Width = 300,
+                Height = 200,
+                Text = title
+            };
 
             Label lbl = new Label() { Left = 40, Top = 40, Text = label };
 
