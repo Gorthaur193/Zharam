@@ -21,90 +21,95 @@ namespace Zharam
 {
     public partial class Form1 : Form
     {
-        string MyId;
-        ClientWebSocket ws = new ClientWebSocket();
-        string name;
+        #region NetCommunication Properties
+        string MyId { get; set; }
+        CloudBlobContainer CloudContainer => 
+            CloudStorageAccount.Parse(@"DefaultEndpointsProtocol=https;AccountName=zharam;AccountKey=vy+0emYU8fIsSAV08/a7815/lNSHcUGsZ7GtpZi77DfecFcm8irWqo626VWuWPWpNaFmTK/Q50SkV620oQpArQ==;EndpointSuffix=core.windows.net")
+                               .CreateCloudBlobClient()
+                               .GetContainerReference("messagecontainer");
+        ClientWebSocket Ws { get; set; }
+        #endregion
+
+        delegate void AddMessage(ListViewItem listViewItem);
+        AddMessage ThreadCrossedMessageOutput => (listViewItem) => ChatList.Items.Add(listViewItem);
+
         public Form1()
         {
             InitializeComponent();
-            name = CustomInputControl.ShowDialog("Enter Name", "TITLE");
-
             this.ChatList.Columns.Add("", ChatList.Width - 25);
-            /* ChatList.OwnerDraw = true;
-             * ChatList.DrawSubItem += (sender, e) =>
-            {
-                if ((bool?)e.Item.Tag == null)
-                    e.DrawText(TextFormatFlags.Right);
-                else if ((bool)e.Item.Tag) // true if message is Mine
-                    e.DrawText(TextFormatFlags.Right);
-                else
-                    e.DrawText(TextFormatFlags.Left);
-            };*/
-            ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
+
+            //ChatList.OwnerDraw = true;
+            //ChatList.DrawSubItem += (sender, e) =>
+            //{
+            //    if ((bool?)e.Item.Tag == null)
+            //        e.DrawText(TextFormatFlags.Right);
+            //    else if ((bool)e.Item.Tag) // true if message is Mine
+            //        e.DrawText(TextFormatFlags.Right);
+            //    else
+            //        e.DrawText(TextFormatFlags.Left);
+            //};
+            //ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
+
             SocketInit();
-            // UploadFile();
         }
 
         private async void SocketInit()
         {
-            await ws.ConnectAsync(new Uri($"ws://{Program.BaseAddress}/ws.ashx?name={name}"), CancellationToken.None);
-            var buffer = new byte[1024];
+            Ws = new ClientWebSocket();
+            await Ws.ConnectAsync(new Uri($"ws://{Program.BaseAddress}/ws.ashx?name={CustomInputControl.ShowDialog("Enter Name", "Enter your Chat name")}"), CancellationToken.None);
+
+            byte[] buffer = new byte[1024];
             var segment = new ArraySegment<byte>(buffer);
-            await ws.ReceiveAsync(segment, CancellationToken.None);
+            await Ws.ReceiveAsync(segment, CancellationToken.None);
             MyId = Encoding.UTF8.GetString(buffer);
-            //string lastmessage = "";
+
             while (true)
             {
                 buffer = new byte[1024];
                 segment = new ArraySegment<byte>(buffer);
-                await ws.ReceiveAsync(segment, CancellationToken.None);
+                await Ws.ReceiveAsync(segment, CancellationToken.None);
 
                 string json = Encoding.UTF8.GetString(buffer).Trim();
-                //if (lastmessage != json) lastmessage = json;
-                //else continue;
+
                 ListViewItem listViewItem;
                 try
                 {
-                    JObject obj = JObject.Parse(json);
-                    JObject message = JObject.Parse((string)obj["Message"]);
+                    JObject basemessage = JObject.Parse(json);
+                    JObject message = JObject.Parse((string)basemessage["Message"]);
                     listViewItem = new ListViewItem
                     {
-                        Tag = (string)obj["Id"] == MyId,
+                        Tag = (string)basemessage["Id"] == MyId,
                         Text = (string)message["Type"] == "TextMessage" ? (string)message["Message"] : $"\t{(string)message["FileAddress"]}"
                     };
                 }
-                catch (Exception)
+                catch
                 {
                     listViewItem = new ListViewItem
                     {
-                        Text = json
+                        Text = json,
+                        Tag = null
                     };
                 }
-                void Print() => ChatList.Items.Add(listViewItem);
-                AddMessage cr = Print;
-                Invoke(cr);
+                Invoke(ThreadCrossedMessageOutput, listViewItem);
             }
         }
-        CloudStorageAccount storageAccount => CloudStorageAccount.Parse(@"DefaultEndpointsProtocol=https;AccountName=zharam;AccountKey=vy+0emYU8fIsSAV08/a7815/lNSHcUGsZ7GtpZi77DfecFcm8irWqo626VWuWPWpNaFmTK/Q50SkV620oQpArQ==;EndpointSuffix=core.windows.net");
-        CloudBlobClient blobClient => storageAccount.CreateCloudBlobClient();
-        CloudBlobContainer container => blobClient.GetContainerReference("messagecontainer");
-        delegate void AddMessage();
 
         private string UploadFile(string Path)
         {
             string NewFileName = Guid.NewGuid().ToString();
             using (var fileStream = File.OpenRead(Path))
-                container.GetBlockBlobReference(NewFileName += fileStream.Name.Substring(fileStream.Name.IndexOf('.'))).UploadFromStream(fileStream);
+                CloudContainer.GetBlockBlobReference(NewFileName += fileStream.Name.Substring(fileStream.Name.IndexOf('.'))).UploadFromStream(fileStream);
+            MessageBox.Show("Uploaded");
             return NewFileName;
         }
 
         private void ChatList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             var q = e.Item;
-            if (q.Text[0] == '\t')
+            if (q.Text[0] == '\t' && MessageBox.Show("Download File?", "Download alert", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference(q.Text.Substring(1));
-                using (var fileStream = File.OpenWrite($"c:/q/{q.Text.Substring(1)}"))
+                CloudBlockBlob blockBlob = CloudContainer.GetBlockBlobReference(q.Text.Substring(1));
+                using (var fileStream = File.OpenWrite($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/ZharamDownloads/{q.Text.Substring(1)}"))
                     blockBlob.DownloadToStream(fileStream);
                 MessageBox.Show("DOWNLOADED");
             }
