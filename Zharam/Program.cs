@@ -8,7 +8,7 @@ namespace Zharam
 {
     static class Program
     {
-        public static string BaseAddress => "localhost/ZharamServ/";
+        public static string BaseAddress => "zharamserv.azurewebsites.net/";
         [STAThread]
         static void Main()
         {

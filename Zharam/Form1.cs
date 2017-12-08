@@ -119,19 +119,14 @@ namespace Zharam
         private async void SendButton_Click(object sender, EventArgs e)
         {
             string line = SendBox.Text;
-            string qwery = $"http://{Program.BaseAddress}api/message/?message={(new TextMessage(line, 0)).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", "");
-            var qwe = await new HttpClient().PostAsync(qwery, new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
-            var qwr = qwe.Content.ReadAsStringAsync();
+            var debuginfo = await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message/?message={(new TextMessage(line, 0)).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", ""), new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
         }
 
         private async void FileButton_Click(object sender, EventArgs e)
         {
             if (FilePicker.ShowDialog() == DialogResult.OK)
             {
-                string line = $"http://{Program.BaseAddress}api/message?message={new FileMessage(UploadFile(FilePicker.FileName), 0).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", "");
-
-                var qwe = await new HttpClient().PostAsync(line, new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
-                var qwr = qwe.Content.ReadAsStringAsync();
+                var debuginfo = await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message?message={new FileMessage(UploadFile(FilePicker.FileName), 0).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", ""), new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
             }
         }
     }
