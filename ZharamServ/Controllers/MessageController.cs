@@ -14,15 +14,15 @@ namespace ZharamServ.Controllers
 {
     public class MessageController : ApiController
     {
-        // POST: api/Message
         public HttpResponseMessage Post(string message, string myid)
         {
-            var name = (Ws.clients.First((A) => (A as MyWebSocketHandler).id == myid) as MyWebSocketHandler).name;
-            JObject json = new JObject();
-            json.Add("Message", message);
-            json.Add("Id", myid);
-            json.Add("Name", name);
-            Ws.clients.Broadcast(json.ToString());
+            var name = (Ws.Clients.First((A) => (A as MyWebSocketHandler).Id == myid) as MyWebSocketHandler).Name;
+            Ws.Clients.Broadcast(new JObject
+            {
+                { "Message", message },
+                { "Id", myid },
+                { "Name", name }
+            }.ToString());
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }

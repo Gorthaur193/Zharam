@@ -9,7 +9,6 @@ namespace ZharamServ.Controllers
 {
     public class LoginController : ApiController
     {
-        // GET: api/Login/5
         public string Get(string login, string password)
         {
             return "value";

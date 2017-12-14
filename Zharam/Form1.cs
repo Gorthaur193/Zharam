@@ -36,9 +36,8 @@ namespace Zharam
         public Form1()
         {
             InitializeComponent();
-            this.ChatList.Columns.Add("", ChatList.Width - 25);
 
-            ChatList.OwnerDraw = true;
+            this.ChatList.Columns.Add("", ChatList.Width - 25);
             ChatList.DrawSubItem += (sender, e) =>
             {
                 if ((bool?)e.Item.Tag == null)
@@ -48,8 +47,8 @@ namespace Zharam
                 else
                     e.DrawText(TextFormatFlags.Left);
             };
-            ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
 
+            ChatList.ItemSelectionChanged += ChatList_ItemSelectionChanged;
             SocketInit();
         }
 

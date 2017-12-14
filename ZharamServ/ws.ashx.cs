@@ -7,12 +7,11 @@ using System.Web;
 
 namespace ZharamServ
 {
-    /// <summary>
-    /// Summary description for ws
-    /// </summary>
     public class Ws : IHttpHandler
     {
-        public static WebSocketCollection clients = new WebSocketCollection();
+        static WebSocketCollection clients = new WebSocketCollection();
+        
+        public static WebSocketCollection Clients { get { return clients; } set { clients = value; } }
 
         public void ProcessRequest(HttpContext context)
         {
@@ -31,8 +30,8 @@ namespace ZharamServ
 
     public class MyWebSocketHandler : WebSocketHandler
     {
-        public string name;
-        public string id;
+        public string Name { get; set; }
+        public string Id { get; set; }
 
         public MyWebSocketHandler()
         {
@@ -40,28 +39,29 @@ namespace ZharamServ
 
         public override void OnMessage(string message)
         {
-            JObject json = new JObject();
-            json.Add("Message", message);
-            json.Add("Id", id);
-            json.Add("Name", name);
-            Ws.clients.Broadcast(json.ToString());
+            JObject json = new JObject
+            {
+                { "Message", message },
+                { "Id", Id },
+                { "Name", Name }
+            };
+            Ws.Clients.Broadcast(json.ToString());
 
         }
 
         public override void OnOpen()
         {
-            this.name = this.WebSocketContext.QueryString["name"];
-            this.id = Guid.NewGuid().ToString();
-            this.Send(id);
-            Ws.clients.Add(this);
-            Ws.clients.Broadcast(name + " has connected.");
+            this.Name = this.WebSocketContext.QueryString["name"];
+            this.Id = Guid.NewGuid().ToString();
+            this.Send(Id);
+            Ws.Clients.Add(this);
+            Ws.Clients.Broadcast(Name + " has connected.");
         }
 
         public override void OnClose()
         {
-            Ws.clients.Remove(this);
-            Ws.clients.Broadcast($"{name} has gone away.");
+            Ws.Clients.Remove(this);
+            Ws.Clients.Broadcast($"{Name} has gone away.");
         }
     }
-
 }
