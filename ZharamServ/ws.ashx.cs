@@ -9,31 +9,24 @@ namespace ZharamServ
 {
     public class Ws : IHttpHandler
     {
-        static WebSocketCollection clients = new WebSocketCollection();
-        
-        public static WebSocketCollection Clients { get { return clients; } set { clients = value; } }
+        public static WebSocketCollection Clients { get; private set; }
 
         public void ProcessRequest(HttpContext context)
         {
             if (context.IsWebSocketRequest)
-                context.AcceptWebSocketRequest(new MyWebSocketHandler());
+                context.AcceptWebSocketRequest(new ModifiedWebSocketHandler());
         }
 
-        public bool IsReusable
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsReusable => false;
     }
 
-    public class MyWebSocketHandler : WebSocketHandler
+    public class ModifiedWebSocketHandler : WebSocketHandler
     {
         public string Name { get; set; }
         public string Id { get; set; }
+        public User Parent { get; private set; }
 
-        public MyWebSocketHandler()
+        public ModifiedWebSocketHandler()
         {
         }
 
@@ -46,7 +39,6 @@ namespace ZharamServ
                 { "Name", Name }
             };
             Ws.Clients.Broadcast(json.ToString());
-
         }
 
         public override void OnOpen()

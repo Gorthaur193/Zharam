@@ -23,7 +23,7 @@ namespace Zharam
     {
         #region NetCommunication Properties
         string MyId { get; set; }
-        CloudBlobContainer CloudContainer => 
+        CloudBlobContainer CloudContainer =>
             CloudStorageAccount.Parse(@"DefaultEndpointsProtocol=https;AccountName=zharam;AccountKey=vy+0emYU8fIsSAV08/a7815/lNSHcUGsZ7GtpZi77DfecFcm8irWqo626VWuWPWpNaFmTK/Q50SkV620oQpArQ==;EndpointSuffix=core.windows.net")
                                .CreateCloudBlobClient()
                                .GetContainerReference("messagecontainer");
@@ -31,7 +31,8 @@ namespace Zharam
         #endregion
 
         delegate void AddMessage(ListViewItem listViewItem);
-        AddMessage ThreadCrossedMessageOutput => (listViewItem) => ChatList.Items.Add(listViewItem);
+        AddMessage ThreadCrossedMessageOutput =>
+            (listViewItem) => ChatList.Items.Add(listViewItem);
 
         public Form1()
         {
@@ -55,7 +56,7 @@ namespace Zharam
         private async void SocketInit()
         {
             Ws = new ClientWebSocket();
-            await Ws.ConnectAsync(new Uri($"ws://{Program.BaseAddress}/ws.ashx?name={CustomInputControl.ShowDialog("Enter Name", "Enter your Chat name")}"), CancellationToken.None);
+            await Ws.ConnectAsync(new Uri($"ws://{Program.BaseAddress}/ws.ashx?name={TextBoxInputControl.ShowDialog("Enter Name", "Enter your Chat name")}"), CancellationToken.None);
 
             byte[] buffer = new byte[1024];
             var segment = new ArraySegment<byte>(buffer);
@@ -117,20 +118,20 @@ namespace Zharam
 
         private async void SendButton_Click(object sender, EventArgs e)
         {
-            string line = SendBox.Text;
-            var debuginfo = await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message/?message={(new TextMessage(line, 0)).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", ""), new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
+            await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message/?message={(new TextMessage(SendBox.Text, 0)).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", ""), ContentCrutch());
         }
 
         private async void FileButton_Click(object sender, EventArgs e)
         {
             if (FilePicker.ShowDialog() == DialogResult.OK)
-            {
-                var debuginfo = await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message?message={new FileMessage(UploadFile(FilePicker.FileName), 0).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", ""), new FormUrlEncodedContent(new KeyValuePair<string, string>[] { }));
-            }
+                await new HttpClient().PostAsync($"http://{Program.BaseAddress}api/message?message={new FileMessage(UploadFile(FilePicker.FileName), 0).ToString()}&myid={MyId}".Replace("\r\n", "").Replace("\0", ""), ContentCrutch());
         }
+
+        HttpContent ContentCrutch() =>
+            new FormUrlEncodedContent(new KeyValuePair<string, string>[] { });
     }
 
-    public static class CustomInputControl
+    public static class TextBoxInputControl
     {
         public static string ShowDialog(string label, string title)
         {

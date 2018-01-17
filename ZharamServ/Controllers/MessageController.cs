@@ -16,7 +16,7 @@ namespace ZharamServ.Controllers
     {
         public HttpResponseMessage Post(string message, string myid)
         {
-            var name = (Ws.Clients.First((A) => (A as MyWebSocketHandler).Id == myid) as MyWebSocketHandler).Name;
+            string name = (Ws.Clients.First((A) => (A as ModifiedWebSocketHandler).Id == myid) as ModifiedWebSocketHandler).Name;
             Ws.Clients.Broadcast(new JObject
             {
                 { "Message", message },
