@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ZharamServ
+namespace ZharamServ.Logic
 {
     public class User
     {
@@ -12,7 +12,7 @@ namespace ZharamServ
         public string CurrentToken { get; }
         public string Id { get; }
         public Room CurrentRoom { get; private set; }
-        public void SwitchRoom(Room room) => CurrentRoom = room;
+        public void SwitchToRoom(Room room) => CurrentRoom = room;
 
         public User(string jsonInfo)
         {

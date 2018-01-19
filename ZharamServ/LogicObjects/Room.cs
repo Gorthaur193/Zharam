@@ -5,7 +5,7 @@ using System.Web;
 using Microsoft.ServiceModel.WebSockets;
 using Microsoft.Web.WebSockets;
 
-namespace ZharamServ
+namespace ZharamServ.Logic
 {
     public class Room
     {
