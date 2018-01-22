@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using ZharamServ.Models;
 
 namespace ZharamServ.DAL
 {
@@ -10,7 +11,7 @@ namespace ZharamServ.DAL
     {
         protected override void Seed(ChatContext context)
         {
-             
+                                   
         }
     }
 }
