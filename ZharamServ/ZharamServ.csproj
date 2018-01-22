@@ -197,6 +197,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="LogicObjects\Room.cs" />
+    <Compile Include="Migrations\201801221321468_FirstMigration.cs" />
+    <Compile Include="Migrations\201801221321468_FirstMigration.Designer.cs">
+      <DependentUpon>201801221321468_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\PersonalMessage.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomMessage.cs" />
@@ -281,7 +286,11 @@
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201801221321468_FirstMigration.resx">
+      <DependentUpon>201801221321468_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
