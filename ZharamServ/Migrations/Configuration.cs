@@ -20,4 +20,4 @@ namespace ZharamServ.Migrations
             //  to avoid creating duplicate seed data.
         }
     }
-}
+}                                                                          

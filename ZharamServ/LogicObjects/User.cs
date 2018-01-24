@@ -7,16 +7,17 @@ namespace ZharamServ.Logic
 {
     public class User
     {
+        public Models.User UserInDatabase { get; }
+
         public ModifiedWebSocketHandler UserConnection { get; }
-        public string Name { get; }
         public string CurrentToken { get; }
-        public string Id { get; }
+                
         public Room CurrentRoom { get; private set; }
         public void SwitchToRoom(Room room) => CurrentRoom = room;
 
-        public User(string jsonInfo)
+        public User(ModifiedWebSocketHandler userConnection, Guid userId, Guid token)
         {
-            
-        }
+                                                
+        }                      
     }       
 }

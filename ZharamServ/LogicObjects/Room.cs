@@ -9,6 +9,8 @@ namespace ZharamServ.Logic
 {
     public class Room
     {
+        public Models.Room RoomInDatabase { get; }
+
         public List<User> UserList { get; private set; }
 
         public void Broadcast(string message)
@@ -17,5 +19,9 @@ namespace ZharamServ.Logic
                 item.UserConnection.Send(message);
         }
 
+        public Room(Guid roomId)
+        {
+            
+        }
     }
 }
