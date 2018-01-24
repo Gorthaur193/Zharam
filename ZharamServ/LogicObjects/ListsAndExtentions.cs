@@ -30,10 +30,10 @@ namespace ZharamServ
     public static class Extentions
     {
         public static User GetById(this List<User> list, Guid id) =>
-            list.First(x => x.UserInDatabase.Id == id);
+            list.FirstOrDefault(x => x.UserInDatabase.Id == id);
 
         public static Room GetById(this List<Room> list, Guid id) =>
-            list.First(x => x.RoomInDatabase.RoomId == id);
+            list.FirstOrDefault(x => x.RoomInDatabase.RoomId == id);
         
         public static bool IsExist(this List<User> list, Models.User user)
         {

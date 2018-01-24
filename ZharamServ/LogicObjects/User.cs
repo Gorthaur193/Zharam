@@ -13,15 +13,25 @@ namespace ZharamServ.Logic
 
         public ModifiedWebSocketHandler UserConnection { get; }
         public Guid CurrentToken { get; }
-                
-        public Room CurrentRoom { get; private set; }
-        public void SwitchToRoom(Room room) => CurrentRoom = room;
 
         public User(ModifiedWebSocketHandler userConnection, Guid userId, Guid token)
         {
-            UserInDatabase = DbContext.Users.First(x => x.Id == userId);
+            UserInDatabase = DbContext.Users.FirstOrDefault(x => x.Id == userId);
             UserConnection = userConnection;
-            CurrentToken = token;                                                
+            CurrentToken = token;
+
+            foreach (var room in UserInDatabase.Rooms)
+            {
+                var databaseRoom = RoomList.GetById(room.RoomId);
+                if (databaseRoom != null)
+                    UserList.Add(this);
+                else
+                {
+                    var newRoom = new Room(room.RoomId);
+                    RoomList.Add(newRoom);
+                    newRoom.UserList.Add(this);
+                }    
+            }
         }                      
     }       
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using Microsoft.ServiceModel.WebSockets;
 using Microsoft.Web.WebSockets;
+using static ZharamServ.Logic.CurrentMemo;
+
 
 namespace ZharamServ.Logic
 {
@@ -21,7 +23,8 @@ namespace ZharamServ.Logic
 
         public Room(Guid roomId)
         {
-            
+            UserList = new List<User>();
+            RoomInDatabase = DbContext.Rooms.FirstOrDefault(x => x.RoomId == roomId);
         }
     }
 }

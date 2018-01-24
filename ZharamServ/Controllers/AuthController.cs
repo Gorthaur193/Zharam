@@ -19,7 +19,7 @@ namespace ZharamServ.Controllers
         // To be changed to secure protocol 
         public JObject Get(string login, string password)
         {
-            var user = DbContext.Users.First(x => x.Login == login && x.PasswordHash == password);
+            var user = DbContext.Users.FirstOrDefault(x => x.Login == login && x.PasswordHash == password);
             if (user == null)
                 return new JObject(new { status = "fail" });
 

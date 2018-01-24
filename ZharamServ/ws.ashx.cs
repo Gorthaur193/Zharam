@@ -37,7 +37,7 @@ namespace ZharamServ
         {
             var authToken = new Guid(this.WebSocketContext.QueryString["AuthToken"]);
             var login = this.WebSocketContext.QueryString["Login"];
-            var userId = DbContext.Users.First(x => x.Login == login).Id;
+            var userId = DbContext.Users.FirstOrDefault(x => x.Login == login).Id;
             
             if (userId != null && AuthList.Contains((userId, authToken)))
             {
@@ -55,6 +55,8 @@ namespace ZharamServ
         public override void OnClose()
         {
             UserList.Remove(Parent);
+            foreach (var room in RoomList)
+                room.UserList.Remove(Parent);
         }
     }
 }
