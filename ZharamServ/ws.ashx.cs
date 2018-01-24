@@ -43,13 +43,18 @@ namespace ZharamServ
             {
                 AuthList.RemoveAll(x => x.UserId == userId);
                 var givenToken = Guid.NewGuid();
-                UserList.Add(new User(this, userId, givenToken));
+                Parent = new User(this, userId, givenToken);
+                UserList.Add(Parent);
                 this.Send(new JObject(new { status = "ok", token = givenToken }).ToString());
             }  
+            else
+                this.Send(new JObject(new { status = "go away, you dirty cheater!" }).ToString());
+
         }
 
         public override void OnClose()
         {
+            UserList.Remove(Parent);
         }
     }
 }
