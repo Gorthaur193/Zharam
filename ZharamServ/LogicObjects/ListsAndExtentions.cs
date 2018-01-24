@@ -18,6 +18,9 @@ namespace ZharamServ.Logic
         static CurrentMemo()
         {
             DbContext = new ChatContext();
+            AuthList = new List<(Guid UserId, Guid AuthToken)>();
+            RoomList = new List<Room>();
+            UserList = new List<User>();
         }
     }
 }
