@@ -33,6 +33,8 @@ namespace ZharamServ.Controllers
             else
                 return new JObject(new { status = "online" });
         }
+
+        //soon comes registration
         public string Post(string login, string password, string email)
         {
             return "DEPRECATED";

@@ -39,7 +39,7 @@ namespace ZharamServ
             var login = this.WebSocketContext.QueryString["Login"];
             var userId = DbContext.Users.First(x => x.Login == login).Id;
             
-            if (AuthList.Contains((userId, authToken)))
+            if (userId != null && AuthList.Contains((userId, authToken)))
             {
                 AuthList.RemoveAll(x => x.UserId == userId);
                 var givenToken = Guid.NewGuid();

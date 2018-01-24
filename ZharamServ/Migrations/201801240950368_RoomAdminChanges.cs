@@ -3,7 +3,7 @@ namespace ZharamServ.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class FirstMigration : DbMigration
+    public partial class RoomAdminChanges : DbMigration
     {
         public override void Up()
         {
@@ -48,8 +48,11 @@ namespace ZharamServ.Migrations
                         RoomId = c.Guid(nullable: false),
                         Name = c.String(),
                         Description = c.String(),
+                        AdminId = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => t.RoomId);
+                .PrimaryKey(t => t.RoomId)
+                .ForeignKey("dbo.User", t => t.AdminId, cascadeDelete: true)
+                .Index(t => t.AdminId);
             
             CreateTable(
                 "dbo.RoomMessage",
@@ -90,10 +93,12 @@ namespace ZharamServ.Migrations
             DropForeignKey("dbo.UserRoom", "UserId", "dbo.User");
             DropForeignKey("dbo.RoomMessage", "UserId", "dbo.User");
             DropForeignKey("dbo.RoomMessage", "RoomId", "dbo.Room");
+            DropForeignKey("dbo.Room", "AdminId", "dbo.User");
             DropIndex("dbo.UserRoom", new[] { "RoomId" });
             DropIndex("dbo.UserRoom", new[] { "UserId" });
             DropIndex("dbo.RoomMessage", new[] { "RoomId" });
             DropIndex("dbo.RoomMessage", new[] { "UserId" });
+            DropIndex("dbo.Room", new[] { "AdminId" });
             DropIndex("dbo.PersonalMessage", new[] { "ReceiverId" });
             DropIndex("dbo.PersonalMessage", new[] { "SenderId" });
             DropTable("dbo.UserRoom");

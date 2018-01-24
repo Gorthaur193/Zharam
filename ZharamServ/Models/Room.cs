@@ -10,7 +10,9 @@ namespace ZharamServ.Models
         public Guid RoomId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public Guid AdminId { get; set; }
 
+        public virtual User Admin { get; set; }
         public virtual ICollection<RoomMessage> RoomMessages { get; set; } 
         public virtual ICollection<User> Users { get; set; }
     }
