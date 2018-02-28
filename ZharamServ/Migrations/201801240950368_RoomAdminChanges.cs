@@ -18,8 +18,8 @@ namespace ZharamServ.Migrations
                         FixedTime = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.MessageId)
-                .ForeignKey("dbo.User", t => t.ReceiverId, cascadeDelete: true)
-                .ForeignKey("dbo.User", t => t.SenderId, cascadeDelete: true)
+                .ForeignKey("dbo.User", t => t.ReceiverId, cascadeDelete: false)
+                .ForeignKey("dbo.User", t => t.SenderId, cascadeDelete: false)
                 .Index(t => t.SenderId)
                 .Index(t => t.ReceiverId);
             
@@ -66,7 +66,7 @@ namespace ZharamServ.Migrations
                     })
                 .PrimaryKey(t => t.MessageId)
                 .ForeignKey("dbo.Room", t => t.RoomId, cascadeDelete: true)
-                .ForeignKey("dbo.User", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.User", t => t.UserId, cascadeDelete: false)
                 .Index(t => t.UserId)
                 .Index(t => t.RoomId);
             
@@ -78,7 +78,7 @@ namespace ZharamServ.Migrations
                         RoomId = c.Guid(nullable: false),
                     })
                 .PrimaryKey(t => new { t.UserId, t.RoomId })
-                .ForeignKey("dbo.User", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.User", t => t.UserId, cascadeDelete: false)
                 .ForeignKey("dbo.Room", t => t.RoomId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoomId);

@@ -20,7 +20,7 @@ namespace ZharamServ.Controllers
         public JObject Get(string login, string password)
         {
             var user = DbContext.Users.FirstOrDefault(x => x.Login == login && x.PasswordHash == password);
-            if (user == null)
+            if (user == null)                                                                                    
                 return new JObject(new { status = "fail" });
 
             if (!UserList.IsExist(user))

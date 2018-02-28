@@ -219,10 +219,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\TempDatabase.mdf" />
-    <Content Include="App_Data\TempDatabase_log.ldf">
-      <DependentUpon>TempDatabase.mdf</DependentUpon>
-    </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -302,6 +298,9 @@
     <EmbeddedResource Include="Migrations\201801240950368_RoomAdminChanges.resx">
       <DependentUpon>201801240950368_RoomAdminChanges.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
