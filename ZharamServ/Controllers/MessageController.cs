@@ -17,9 +17,9 @@ namespace ZharamServ.Controllers
 {
     public class MessageController : ApiController
     {
-        public HttpResponseMessage Post(string json)
+        public HttpResponseMessage Post(string json, string messagetype)
         {
-            return this.GetType().InvokeMember("PersonalPost", System.Reflection.BindingFlags.InvokeMethod, null, this, new object[] { JObject.Parse(json) }) as HttpResponseMessage;
+            return this.GetType().InvokeMember(messagetype, System.Reflection.BindingFlags.InvokeMethod, null, this, new object[] { JObject.Parse(json) }) as HttpResponseMessage;
             //return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
@@ -30,19 +30,50 @@ namespace ZharamServ.Controllers
 
         public HttpResponseMessage PersonalPost(JObject json)         // token + message + receiverId
         {
-            var personalMessage = new PersonalMessage
+            try
             {
-                MessageId = Guid.NewGuid(),
-                ContentJson = json["Message"].ToString(),
-                FixedTime = DateTime.Now,
-                SenderId = UserList.FirstOrDefault(x => x.CurrentToken == (Guid)json["Token"]).UserInDatabase.Id,
-                ReceiverId = (Guid)json["ReceiverId"]
-            };
+                var personalMessage = new PersonalMessage
+                {
+                    MessageId = Guid.NewGuid(),
+                    ContentJson = json["Message"].ToString(),
+                    FixedTime = DateTime.Now,
+                    SenderId = UserList.FirstOrDefault(x => x.CurrentToken == (Guid)json["Token"]).UserInDatabase.Id,
+                    ReceiverId = (Guid)json["ReceiverId"]
+                };
 
-            UserList.FirstOrDefault(x => x.UserInDatabase.Id == personalMessage.ReceiverId).UserConnection.Send(personalMessage.ContentJson);
-            DbContext.PersonalMessages.Add(personalMessage);
-            DbContext.SaveChanges();
+                UserList.FirstOrDefault(x => x.UserInDatabase.Id == personalMessage.ReceiverId).UserConnection.Send(personalMessage.ContentJson);
+                DbContext.PersonalMessages.Add(personalMessage);
+            }
+            catch (Exception E)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
+                throw new Exception($"Personal Message gone wrong #{E.Message}#");
+            }
 
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        public HttpResponseMessage RoomPost(JObject json)           // token + message + roomid
+        {
+            try
+            {         
+                var roomMessage = new RoomMessage
+                {
+                    MessageId = Guid.NewGuid(),
+                    ContentJson = json["Message"].ToString(),
+                    FixedTime = DateTime.Now,
+                    UserId = UserList.FirstOrDefault(x => x.CurrentToken == (Guid)json["Token"]).UserInDatabase.Id,
+                    RoomId = (Guid)json["RoomId"]
+                };
+
+                RoomList.GetById(roomMessage.RoomId).Broadcast(roomMessage.ContentJson);
+                DbContext.RoomMessages.Add(roomMessage);
+            }
+            catch (Exception E)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
+                throw new Exception($"Personal Message gone wrong #{E.Message}#");
+            }
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }

@@ -31,15 +31,17 @@ namespace ZharamServ
 
         public override void OnMessage(string message)
         {
+            Send("ok, i'll think of it.");
         }
 
+        //one device auth only
         public override void OnOpen()
         {
             var authToken = new Guid(this.WebSocketContext.QueryString["AuthToken"]);
             var login = this.WebSocketContext.QueryString["Login"];
             var userId = DbContext.Users.FirstOrDefault(x => x.Login == login).Id;
             
-            if (userId != null && AuthList.Contains((userId, authToken)))
+            if (AuthList.Contains((userId, authToken)))
             {
                 AuthList.RemoveAll(x => x.UserId == userId);
                 var givenToken = Guid.NewGuid();

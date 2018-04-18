@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Timers;
 using System.Web;
 using ZharamServ.DAL;
 using ZharamServ.Logic;
@@ -21,6 +22,17 @@ namespace ZharamServ.Logic
             AuthList = new List<(Guid UserId, Guid AuthToken)>();
             RoomList = new List<Room>();
             UserList = new List<User>();
+
+            //Experimental
+            var DbContextUpdater = new Timer(1000)
+            {
+                AutoReset = true
+            };
+            DbContextUpdater.Elapsed += (sender, args) => 
+            {
+                DbContext.SaveChanges();
+            };
+            DbContextUpdater.Start();
         }
     }
 }
